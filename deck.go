@@ -28,17 +28,17 @@ func createDeck() *deck {
 	return &cards
 }
 
-func (d *deck) dealHand(size int) deck {
-	var hand deck
+func (d *deck) dealHand(size int) hand {
+	var currHand hand
 	var cards deck = *d
 
 	if size >= len(*d) {
-		hand = *d
+		currHand = createHand(*d)
 		*d = make(deck, 0)
 	} else {
-		hand = cards[:size]
+		currHand = createHand(cards[:size])
 		*d = cards[size:]
 	}	
 
-	return hand
+	return currHand
 }
