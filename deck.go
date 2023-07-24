@@ -5,12 +5,16 @@ import "fmt"
 type deck []string
 
 func (d deck) printDeck() {
+	if len(d) == 0 {
+		fmt.Println("Deck is empty!")
+		return
+	}
 	for _, card := range d {
 		fmt.Println(card)
 	}
 }
 
-func createDeck() deck {
+func createDeck() *deck {
 	var cards deck
 
 	cardSuits := []string{"Spades", "Diamonds", "Hearts", "Clubs"}
@@ -21,5 +25,20 @@ func createDeck() deck {
 			cards = append(cards, cardNum + " of " + cardSuit)
 		}
 	}
-	return cards
+	return &cards
+}
+
+func (d *deck) dealHand(size int) deck {
+	var hand deck
+	var cards deck = *d
+
+	if size >= len(*d) {
+		hand = *d
+		*d = make(deck, 0)
+	} else {
+		hand = cards[:size]
+		*d = cards[size:]
+	}	
+
+	return hand
 }
