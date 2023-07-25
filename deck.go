@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+	"strings"
+)
 
 type deck []string
 
@@ -41,4 +45,25 @@ func (d *deck) dealHand(size int) hand {
 	}	
 
 	return currHand
+}
+
+func (d deck) storeDeck(filename string) error {
+	var byteDeck []byte = []byte(d.deckToString())
+	
+	return ioutil.WriteFile("decks/" + filename, byteDeck, 0666)
+
+}
+
+func readDeckFromFile(filename string) deck {
+	cards, err := ioutil.ReadFile("decks/" + filename)
+	if err == nil {
+		var newDeck deck = strings.Split(string(cards), ",")
+		return newDeck
+	}
+	fmt.Println("Error occured during file read: ", err)
+	return *createDeck()
+}
+
+func (d deck) deckToString() string {
+	return strings.Join(d, ",")
 }
