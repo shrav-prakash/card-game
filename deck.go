@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"os"
 	"strings"
 )
 
@@ -61,9 +63,17 @@ func readDeckFromFile(filename string) deck {
 		return newDeck
 	}
 	fmt.Println("Error occured during file read: ", err)
-	return *createDeck()
+	os.Exit(1)
+	return make(deck, 0)
 }
 
 func (d deck) deckToString() string {
 	return strings.Join(d, ",")
+}
+
+func (d deck) shuffle() {
+	for i := range d {
+		newPos := rand.Intn(len(d) - 1)
+		d[i], d[newPos] = d[newPos], d[i] 
+	}
 }

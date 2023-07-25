@@ -2,11 +2,9 @@ package main
 
 import "fmt"
 
-// import "fmt"
-
 func main() {
 	cards := createDeck()
-	
+	cards.shuffle()
 	hand := cards.dealHand(10)
 	fmt.Println("Current Hand:")
 	hand.printHand()
