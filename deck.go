@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
 	"math/rand"
 	"os"
 	"strings"
@@ -52,12 +51,12 @@ func (d *deck) dealHand(size int) hand {
 func (d deck) storeDeck(filename string) error {
 	var byteDeck []byte = []byte(d.deckToString())
 	
-	return ioutil.WriteFile("decks/" + filename, byteDeck, 0666)
+	return os.WriteFile("decks/" + filename, byteDeck, 0666)
 
 }
 
 func readDeckFromFile(filename string) deck {
-	cards, err := ioutil.ReadFile("decks/" + filename)
+	cards, err := os.ReadFile("decks/" + filename)
 	if err == nil {
 		var newDeck deck = strings.Split(string(cards), ",")
 		return newDeck
