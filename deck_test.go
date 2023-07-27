@@ -6,25 +6,25 @@ import (
 )
 
 func TestCreateDeck(t *testing.T) {
-	d := *createDeck()
+	d := createDeck()
 
 	if len(d) != 52 {
 		t.Errorf("Expected deck of length 52, got deck of length %v", len(d))
 	}
 
-	if d[0] != "Ace of Spades" {
-		t.Errorf("Expected first card to be Ace of Spades, instead got %v", d[0])
+	if d[0].suit != "Spades" || d[0].number != "Ace" {
+		t.Errorf("Expected first card to be Ace of Spades, instead got %v of %v", d[0].number, d[0].suit)
 	}
 
-	if d[len(d) - 1] != "King of Clubs" {
-		t.Errorf("Expected last card to be King of Clubs, instead got %v", d[len(d) - 1])
+	if d[len(d) - 1].number != "King" || d[len(d) - 1].suit != "Clubs" {
+		t.Errorf("Expected last card to be King of Clubs, instead got %v of %v",d[len(d) - 1].number, d[len(d) - 1].suit)
 	}
 }
 
 func TestStoreDeckAndReadDeckFromFile(t *testing.T) {
 	os.Remove("decks/_decktesting")
 
-	d := *createDeck()
+	d := createDeck()
 	d.storeDeck("_decktesting")
 	readD := readDeckFromFile("_decktesting")
 

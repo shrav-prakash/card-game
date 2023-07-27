@@ -7,7 +7,12 @@ import (
 	"strings"
 )
 
-type deck []string
+type card struct {
+	suit string
+	number string
+}
+
+type deck []card
 
 func (d deck) printDeck() {
 	if len(d) == 0 {
@@ -15,11 +20,11 @@ func (d deck) printDeck() {
 		return
 	}
 	for _, card := range d {
-		fmt.Println(card)
+		fmt.Println(card.number + " of " + card.suit)
 	}
 }
 
-func createDeck() *deck {
+func createDeck() deck {
 	var cards deck
 
 	cardSuits := []string{"Spades", "Diamonds", "Hearts", "Clubs"}
@@ -27,10 +32,14 @@ func createDeck() *deck {
 
 	for _, cardSuit := range cardSuits {
 		for _, cardNum := range cardNums {
-			cards = append(cards, cardNum + " of " + cardSuit)
+			c := card{
+				suit: cardSuit,
+				number: cardNum,
+			}
+			cards = append(cards, c)
 		}
 	}
-	return &cards
+	return cards
 }
 
 func (d *deck) dealHand(size int) hand {
@@ -58,8 +67,16 @@ func (d deck) storeDeck(filename string) error {
 func readDeckFromFile(filename string) deck {
 	cards, err := os.ReadFile("decks/" + filename)
 	if err == nil {
-		var newDeck deck = strings.Split(string(cards), ",")
-		return newDeck
+		var newDeck []string = strings.Split(string(cards), ",")
+		var d deck
+		for _, c := range newDeck {
+			newCard := card{
+				suit: strings.Split(c, " of ")[1],
+				number: strings.Split(c, " of ")[0],
+			}
+			d = append(d, newCard)
+		}
+		return d
 	}
 	fmt.Println("Error occured during file read: ", err)
 	os.Exit(1)
@@ -67,7 +84,11 @@ func readDeckFromFile(filename string) deck {
 }
 
 func (d deck) deckToString() string {
-	return strings.Join(d, ",")
+	var cards []string
+	for _, card := range d {
+		cards = append(cards, card.number + " of " + card.suit)
+	}
+	return strings.Join(cards, ",")
 }
 
 func (d deck) shuffle() {
